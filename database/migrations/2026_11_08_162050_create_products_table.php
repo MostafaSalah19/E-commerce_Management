@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->decimal('price', 10, 2);
             $table->unsignedInteger('stock')->default(0);
-            $table->enum('status', ['In stock', 'Out of stock'])->default('stock');
+            $table->enum('status', ['In stock', 'Out of stock'])->default('In stock');
             $table->timestamps();
 
             $table->index(['status', 'category_id']);
