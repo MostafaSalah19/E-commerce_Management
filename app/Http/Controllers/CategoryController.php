@@ -43,4 +43,15 @@ class CategoryController extends Controller
             'success' => true
         ], 201);
     }
+
+    public function destroy($id)
+    {
+        $category = Category::findOrFail($id);
+
+        $category->delete();
+
+        return response()->json([
+            'success' => true
+        ], 201);
+    }
 }
