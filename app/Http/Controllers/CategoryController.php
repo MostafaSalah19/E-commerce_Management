@@ -26,4 +26,10 @@ class CategoryController extends Controller
            'success'=> true,
         ], 201);
     }
+
+    public function show($id)
+    {
+        $category = Category::find($id);
+        return $category;
+    }
 }
