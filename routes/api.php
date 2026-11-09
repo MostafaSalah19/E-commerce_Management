@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -11,4 +13,8 @@ Route::post('categories', [CategoryController::class, 'store']);
 Route::get('categories/{category}', [CategoryController::class, 'show']);
 Route::put('categories/{category}', [CategoryController::class, 'update']);
 Route::delete('categories/{category}', [CategoryController::class, 'destroy']);
+
+Route::get('products', [ProductController::class, 'index']);
+Route::post('products', [ProductController::class, 'store']);
+
 
