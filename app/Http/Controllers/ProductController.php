@@ -4,29 +4,34 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
 //use Illuminate\Http\Request;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        return Product::query()->get();
+        $product = Product::query()->get();
+        return ProductResource::collection($product)->additional(['success'=>true]);
     }
 
     public function store(StoreProductRequest $request)
     {
         $data = $request->validated();
 
-        Product::query()->create($data);
+        $product = Product::query()->create($data);
 
-        return response()->json([
-            'success'=> true,
-        ], 201);
+        return new ProductResource($product->load('category'))
+            ->additional(['success'=>true])
+            ->response()->setStatusCode(201);
     }
 
     public function show($id)
     {
-        return Product::query()->find($id);
+        $product = Product::query()->find($id);
+
+        return new ProductResource($product->load('category'))
+            ->additional(['success'=>true]);
     }
 
     public function update(StoreProductRequest $request, $id)
@@ -37,9 +42,8 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        return response()->json([
-            'success' => true
-        ], 201);
+        return new ProductResource($product->load('category'))
+            ->additional(['success'=>true]);
     }
 
     public function destroy($id)
@@ -49,7 +53,8 @@ class ProductController extends Controller
         $product->delete();
 
         return response()->json([
-            'success'=> true
-        ], 201);
+            'success'=> true,
+            'message'=>'Deleted'
+        ]);
     }
 }
