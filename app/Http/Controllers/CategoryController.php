@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 //use Illuminate\Http\Request;
 
@@ -10,8 +11,8 @@ class CategoryController extends Controller
 {
     public function index()
     {
-
-        return Category::query()->get();
+        $category = Category::query()->get();
+        return CategoryResource::collection($category)->additional(['success' => true]);
 
     }
 
@@ -19,16 +20,18 @@ class CategoryController extends Controller
     {
         $data = $request->validated();
 
-        Category::query()->create($data);
+        $category = Category::query()->create($data);
 
-        return response()->json([
-           'success'=> true,
-        ], 201);
+        return new CategoryResource($category)
+            ->additional(['success' => true])
+            ->response()->setStatusCode(201);
     }
 
     public function show($id)
     {
-        return Category::query()->find($id);
+        $category = Category::query()->find($id);
+        return (new CategoryResource($category)
+            ->additional(['success' => true]));
     }
 
     public function update(StoreCategoryRequest $request, $id)
@@ -37,19 +40,19 @@ class CategoryController extends Controller
 
         $category->update($request->validated());
 
-        return response()->json([
-            'success' => true
-        ], 201);
+        return (new CategoryResource($category)
+            ->additional(['success' => true]));
     }
 
     public function destroy($id)
     {
-        $category = Category::findOrFail($id);
+        $category = Category::query()->findOrFail($id);
 
         $category->delete();
 
         return response()->json([
-            'success' => true
-        ], 201);
+            'success' => true,
+            'message' => 'Deleted'
+        ]);
     }
 }
