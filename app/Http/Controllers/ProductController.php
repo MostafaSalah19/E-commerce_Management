@@ -16,16 +16,21 @@ class ProductController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories, id',
+            'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'status' => 'required|in:In stock, Out of stock'
         ]);
 
-        $product = Product::query()->create($data);
+        Product::query()->create($data);
 
         return response()->json([
             'success'=> true,
         ], 201);
+    }
+
+    public function show($id)
+    {
+        return Product::find($id);
     }
 }
