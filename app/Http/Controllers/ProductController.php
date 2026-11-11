@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreProductRequest;
+//use Illuminate\Http\Request;
 use App\Models\Product;
 
 class ProductController extends Controller
@@ -12,15 +13,9 @@ class ProductController extends Controller
         return Product::query()->get();
     }
 
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'status' => 'required|in:In stock, Out of stock'
-        ]);
+        $data = $request->validated();
 
         Product::query()->create($data);
 
@@ -31,20 +26,14 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        return Product::find($id);
+        return Product::query()->find($id);
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreProductRequest $request, $id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::query()->findOrFail($id);
 
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'status' => 'required|in:In stock, Out of stock'
-        ]);
+        $data = $request->validated();
 
         $product->update($data);
 
@@ -55,7 +44,7 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::query()->findOrFail($id);
 
         $product->delete();
 
