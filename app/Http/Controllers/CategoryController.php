@@ -2,25 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCategoryRequest;
 use App\Models\Category;
-use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        $category = Category::query()->get();
 
-        return $category;
+        return Category::query()->get();
+
     }
 
-    public function store(Request  $request)
+    public function store(StoreCategoryRequest  $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
+        $data = $request->validated();
 
-        $category = Category::query()->create($data);
+        Category::query()->create($data);
 
         return response()->json([
            'success'=> true,
@@ -29,15 +28,14 @@ class CategoryController extends Controller
 
     public function show($id)
     {
-        $category = Category::find($id);
-        return $category;
+        return Category::query()->find($id);
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreCategoryRequest $request, $id)
     {
-        $category = Category::findOrFail($id);
+        $category = Category::query()->findOrFail($id);
 
-        $category->update($request->validate(['name' => 'required|string|max:255',]));
+        $category->update($request->validated());
 
         return response()->json([
             'success' => true
