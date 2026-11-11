@@ -8,7 +8,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * Transform the resource into an array.
  *
- * @property mixed $id
  * @property mixed $name
  */
 class CategoryResource extends JsonResource
