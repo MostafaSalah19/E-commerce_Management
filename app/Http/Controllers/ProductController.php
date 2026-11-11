@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $product = Product::query()->get();
+        $product = Product::query()->with('category:id,name')->get();
         return ProductResource::collection($product)->additional(['success'=>true]);
     }
 
