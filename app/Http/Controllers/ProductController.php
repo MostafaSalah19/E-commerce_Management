@@ -33,4 +33,23 @@ class ProductController extends Controller
     {
         return Product::find($id);
     }
+
+    public function update(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'status' => 'required|in:In stock, Out of stock'
+        ]);
+
+        $product->update($data);
+
+        return response()->json([
+            'success' => true
+        ], 201);
+    }
 }
