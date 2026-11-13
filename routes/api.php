@@ -2,11 +2,14 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\AuthController;
 
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+Route::post('register', [AuthController::class, 'register']);
 
 Route::get('categories', [CategoryController::class, 'index']);
 Route::post('categories', [CategoryController::class, 'store']);
