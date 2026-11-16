@@ -11,7 +11,7 @@ class AuthController extends Controller
     public function register(Request  $request)
     {
         $data = $request->validate([
-            'name' => 'requires|string|max:255',
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8|confirmed'
         ]);
@@ -39,5 +39,13 @@ class AuthController extends Controller
             'success' => true,
             'data'=>['token'=>$request->user()->createToken('api')->plainTextToken]
         ]);
+    }
+
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json()(['success'=>true, 'message'=>'logged out']);
     }
 }
